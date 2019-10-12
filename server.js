@@ -31,7 +31,7 @@ db();
 
 //POST Params 
 app.use(bodyParser.json()); // for parsing application/json. Speacial: bodyParse does not support for upload multi-media file (image...)
-app.use(bodyParser.urlencoded({ extended: true })); 
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser(process.env.SESSION_SECRET));
 //app.use(csurf({cookie: true}));
 //app.use(sessionMiddelWare);
@@ -40,32 +40,31 @@ app.set('view engine', 'pug');
 app.set('views', './views');
 
 // Config response header
-app.use(function(req, res, next) {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-     res.setHeader("Access-Control-Allow-Credentials", "true");
-     res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-     res.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Origin,Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers,Authorization");
-   next();
- });
+app.use(function (req, res, next) {
+	res.setHeader("Access-Control-Allow-Origin", "*");
+	res.setHeader("Access-Control-Allow-Credentials", "true");
+	res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+	res.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Origin,Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers,Authorization");
+	next();
+});
 
-app.get('/',function(req,res)
-{
+app.get('/', function (req, res) {
 	const pageData = {
 		title: 'Home - Car Shopping',
 		name: 'index'
 	};
-	res.render('index',{
+	res.render('index', {
 		pageData: pageData
 	});
 });
 
 //Router 
 app.use('/api/products', apiProductRoute);
-app.use('/student',studentRoutes);
-app.use('/auth',authRoute);
-app.use('/products',sessionMiddelWare,productRoute);
+app.use('/student', studentRoutes);
+app.use('/auth', authRoute);
+app.use('/products', sessionMiddelWare, productRoute);
 app.use('/cart', cartRoute);
-app.use('/tranfer',csurf({cookie: true}), tranferRoute);
+app.use('/tranfer', csurf({ cookie: true }), tranferRoute);
 
 /*
 // catch 404 and forward to error handler
@@ -90,7 +89,7 @@ app.use(function(req, res, next) {
 app.use(fileUpload({
 	  limits: { fileSize: 50 * 1024 * 1024 },
   }));*/
-  
-app.listen(properties.PORT,function() {
-			console.log('Server listening on port ' + port);
-				});
+
+app.listen(properties.PORT, function () {
+	console.log('Server listening on port ' + port);
+});
