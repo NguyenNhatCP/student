@@ -1,0 +1,55 @@
+extends ../layouts/common
+
+block content
+	.content-wrapper
+			.content-top
+				.about_wrapper
+					h1(style='color: red;font-weight:bold') #{pageData.name}
+					form(action="/products/add-product",method="POST",enctype="multipart/form-data")
+						.form-group
+							label(for="name") Name
+							.col-md-8
+								input#name.form-control(name="name",type="text")
+								span.help-block err
+						.form-group
+							label(for="description") Description
+							.col-md-8
+								textarea#description.form-control(rows='5', name='description')
+						.form-group
+							label(for="type_car") Type-car
+							.col-md-8
+								input#type_car.form-control(name="type_car")
+						.form-group
+							label(for="number_car") Numbers-car
+							.col-md-8
+								input#number_car.form-control(name="number_car")
+						.form-group
+							label(for="number_seat") Numbers-seat
+							.col-md-8
+								select#number_seat.form-control(name='number_seat')
+									option(value='4') seat 4
+									option(value='8') seat 8
+									option(value='16') seat 16
+						.form-group
+							label(for="gear") Gear
+							.col-md-8
+								input#gear.form-control(name="gear")
+						.form-group
+							label(for="type_fuel") Type-fuel
+							.col-md-8
+								input#type_fuel.form-control(name="type_fuel")
+						.form-group
+							label(for="price") Price
+							.col-md-8
+								input#price.form-control(name="price")
+						.form-group
+							label(for="sell") Sell
+							.col-md-8
+								input#sell.form-control(name="sell")
+								span.help-block *not required
+						.form-group
+							label(for="image") Image
+							.col-md-8
+								input#image.form-control-file(name="image",type="file")
+
+						button.btn.btn-primary Create

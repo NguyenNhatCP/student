@@ -1,0 +1,22 @@
+extends ../layouts/common
+
+block content
+	h1(style='color: red;font-weight:bold') #{pageData.name}
+	if errors
+		each error in errors
+			.alert.alert-danger= error
+	form(action="/users/register-user",method="POST")
+		.form-group
+			label(for="name") Name
+			input#name.form-control(name="name",type="text", value=values ? values.name : "")
+		.form-group
+			label(for="email") Email
+			input#email.form-control(name="email",type="text", value=values ? values.email : "")
+		.form-group
+			label(for="password") Password
+			input#password.form-control(name="password",type="password", value=values ? values.password : "")
+		.form-group
+			label(for="password_confirm") Password_confirm
+			input#password_confirm.form-control(name="password_confirm",type="password", value=values ? values.password_confirm : "")
+
+		button.btn.btn-primary Create

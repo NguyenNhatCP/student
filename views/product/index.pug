@@ -1,0 +1,75 @@
+extends ../layouts/common
+
+
+block content	
+	.content-wrapper
+			.content-top
+				.about_wrapper
+					h1 #{pageData.name}
+					form(name="myForm",id='form' action='/products/search',onsubmit="return validateForm()", method='get')
+						input.search-query(type='text',value=KeyWord,name='q',placeholder='Input name car...')
+						input.button-search.button(type='submit', value='Search')
+			each product in products	
+				.text
+						.grid_1_of_3.images_1_of_3
+							.grid_1
+								a(href='single.html')
+									img(src=product.image, title='continue reading', alt='')
+								.grid_desc
+									p.title= product.name
+									.price
+										-var price = parseInt(product.price)
+										-var sell = parseInt(product.sell)
+										span.reducedfrom= "$" + price.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")+'₫'
+										if(product.sell)
+											span.actual= '$' + sell.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")+'₫'
+									.cart-button
+										.cart
+											button.button
+												span Details
+										button.button
+											span Cart
+										.clear
+							.clear
+			.paging
+				if(pages > 0 )
+					ul
+						if(current == 1)
+							li.disable
+								a Previous
+						else
+							li.active
+								a(href=`${baseUrl ? baseUrl: '?'}page=${parseInt(page)-1}`) Previous
+						-var i = (Number(current) > 5 ? Number(current) - 4 : 1)
+						if(i !== 1)
+							li.disable
+						- for (; i <= (Number(current) + 4) && i <= pages; i++) 
+							if(i == current) 
+								li(class= pages > 1 ? "current" : "disable")
+									a(href=`${baseUrl ? baseUrl: '?'}page=${parseInt(i)}`)= parseInt(i)
+							else
+								li.active 
+									a(href=`${baseUrl ? baseUrl: '?'}page=${parseInt(i)}`)= parseInt(i)
+							if (i == Number(current) + 4 && i < pages)
+								li.disable
+									a(href=`${baseUrl ? baseUrl: '?'}page=${parseInt(i)}`)= '...'
+						if(current == pages | pages < 1)
+							li.disable
+								a Next
+						else
+							li.active
+								a(href=`${baseUrl ? baseUrl: '?'}page=${parseInt(page)+1}`) Next
+				else
+					p Find Total found 0 products in 0 pages
+					p KeyWord:	
+						span(style='color: red') #{KeyWord}
+block scripts
+	script.
+		function validateForm() {
+				 	var x = document.forms['myForm']['q'].value;
+					if (x == "") {
+						alert('KeyWord must be filled out');
+						return false;
+								}
+							}
+
