@@ -4,18 +4,16 @@ var router = express.Router();
 
 router.get('/login',authController.indexLogin);
 router.post('/login', async (req, res) => {
-	let { email, password } = req.body
+	let { Sid, Password } = req.body
 	try {
-		let foundUser = await authController.login(email, password)
-		res.json({
-			status: 200,
+		let foundUser = await authController.login(Sid, Password)
+		res.status(200).send({
 			code: 1,
 			message: 'Login user successfully!',
 			result: [foundUser]
 		})
 	} catch (error) {
-		res.json({
-			status: 200,
+		res.status(400).send({
 			code: 0,
 			message: `Login user error : ${error}`
 		})
@@ -26,13 +24,13 @@ router.get('/jwtTest', async (req, res) => {
 	try {
 		//Verify token
 		await authController.verifyJWT(tokenKey)
-		res.json({
-			result: 'ok',
+		res.status(200).send({
+			result: 1,
 			message: 'Verify Json Web Token successully',
 		})
 	} catch (error) {
-		res.json({
-			result: 'false',
+		res.status(401).send({
+			result: 0,
 			message: `Error check token : ${error}`
 		})
 	}

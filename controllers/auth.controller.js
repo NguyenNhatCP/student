@@ -14,33 +14,29 @@ const indexLogin = function(req,res){
 	});
 };
 
-const login = async (email,password) => {
+const login = async (Sid,Password) => {
 	try{
-		let foundUser = await User.findOne({email: email.trim()}).exec()
+		let foundUser = await User.findOne({Sid: Sid.trim()}).exec()
 		if(!foundUser)
 		{
-			throw "User does not exist"
+			throw "Sid does not exist"
 		}
-		if (foundUser.isBanned === 1) {
-            throw "User is banned. Please contact your website admin"
-		}
-		let encryptedPassword = foundUser.password
-		let checkPassword = await bcrypt.compare(password, encryptedPassword)
+		let encryptedPassword = foundUser.Password
+		let checkPassword = await bcrypt.compare(Password, encryptedPassword)
 		if(checkPassword == true)
 		{
-			let jsonObject = {id : foundUser._id
-		}
+		let jsonObject = {id : foundUser._id}
 		let tokenKey = await jwt.sign(jsonObject,
 			secretString,{
 				expiresIn: 86400 //Expire in 24h
 			})
-			let userObject = foundUser.toObject()
+		let userObject = foundUser.toObject()
 			userObject.tokenKey = tokenKey
 			return userObject
 		}
 		else
 		{
-			throw 'Tên user hoặc mật khẩu sai' 
+			throw 'Mã sinh viên hoặc mật khẩu không đúng!!!' 
 		}
 	}
 	catch(error)
@@ -57,9 +53,6 @@ const verifyJWT = async (tokenKey) => {
         let foundUser = await User.findById(decodedJson.id)
         if (!foundUser) {
             throw "Ko tìm thấy user với token này"
-        }
-        if (foundUser.isBanned === 1) {
-            throw "User đã bị khoá tài khoản, do vi phạm điều khoản"
         }
         return foundUser
     } catch (error) {
