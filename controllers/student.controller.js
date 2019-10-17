@@ -13,7 +13,15 @@ module.exports.index = function(req,res){
 		pageData:pageData
 		});
 };
-
+const createUser = async(req,res) => {
+	var pageData = {
+		title:'Create User',
+	  	name: 'Form Register'
+	}
+	  res.render('users/create',{
+		  pageData: pageData
+	  });
+  };
 module.exports.search = function(req,res){
 	 var pageData = {
 		  	title:'Result'
@@ -110,33 +118,77 @@ const update = async (id,updateStudent,tokenKey) => {
 	 }
 }
 
-const createUser = async(req,res) => {
-	var pageData = {
-		title:'Create User',
-	  	name: 'Form Register'
+const deleteById = async (studentId, tokenKey) => {
+    try {
+        let signedInUser = await authController.verifyJWT(tokenKey);
+        if (signedInUser.Permission !== 'admin') {
+            throw "Only admin can do this action"
+		}
+		let student = await Student.findByIdAndDelete(studentId)
+		var filePath = path.resolve('./public/'+student.Savatar); 
+		fs.unlink(filePath, function(err) {
+			if(err && err.code == 'ENOENT') {
+				// file doens't exist
+				console.log(filePath);
+				console.info("File doesn't exist, won't remove it.");
+			} else if (err) {
+				// other error
+				console.error("Error occurred while trying to remove file");
+			} else {
+				console.info(`removed`);
+			}
+		});	
+        if (!student) {
+            throw "student not found"
+           // await Post.deleteMany({ author: authorId })
+        }
+    } catch (error) {
+        throw error
+    }
+}
+const getAllStudent = async (page,perPage,tokenKey) =>{
+	try{
+		let signedInUser = await authController.verifyJWT(tokenKey);
+        if (signedInUser.Permission !== 'admin') {
+            throw "Only admin can do this action"
+		}
+		var student = await Student.find({Permission: 'student'})
+		.skip((perPage * page) - perPage)
+		.limit(perPage)
+		return student;
 	}
-	  res.render('users/create',{
-		  pageData: pageData
-	  });
-  };
-	/*
-module.exports.get = function(req,res){
-	var id = req.params.id;
-	var user = db.get('users').find({id: id}).value();
-	res.render('users/view',{
-		user: user
-	});
-};
-
-module.exports.postCreate = function(req,res){
-	req.body.id = shortid.generate();
-	req.body.avatar = req.file.path.split('/').slice(1).join('/');
-
-	console.log(res.local);
-
-	db.get('users').push(req.body).write();
-	//Chuyển trang
-	res.redirect('/users');
-};
-*/
-module.exports ={create,createUser,update}
+	catch(error)
+	{
+		throw error
+	}
+} 
+const searchList = async (page,perPage,Sid,Sfname,Slname,tokenKey) =>{
+	try{
+		let signedInUser = await authController.verifyJWT(tokenKey);
+        if (signedInUser.Permission !== 'student' && signedInUser.Permission !== 'admin') {
+            throw "You cannot do this action"
+		}
+		let student = await Student.find({
+			Permission: 'student',
+			$or:
+			[
+				{Sid: Sid},
+				{Sfname:new RegExp(".*" + Sfname + ".*")},
+				{Slname:new RegExp(".*" + Slname + ".*")}
+			]
+		}).skip((perPage * page) - perPage)
+		.limit(perPage)
+		return student;
+	}
+	catch(error){
+		throw error;
+		}
+}
+module.exports ={
+	create,
+	createUser,
+	update,
+	deleteById,
+	getAllStudent,
+	searchList
+}

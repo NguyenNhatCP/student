@@ -109,5 +109,71 @@ router.put('/update',upload,async (req,res)=>{
 		})
 	};
 })
-//router.get('/:id',controller.get);
+router.post('/delete-by-id', async (req, res) => {
+    let tokenKey = req.headers['x-access-token']
+    let { studentId } = req.body
+    try {
+        await controller.deleteById(studentId, tokenKey)
+        res.status(200).send({
+            result: 1,
+            message: 'Delete student successfully!'
+        })
+    } catch (error) {
+        res.status(400).send({
+            message: `Error delete student: ${error}`
+        })
+    }
+})
+router.get('/all-student', async(req,res) =>{
+	let tokenKey = req.headers['x-access-token'];
+	var page = parseInt(req.query.page) || 1; //n=1
+    var perPage = 5;
+	try
+	{
+		var students = await controller.getAllStudent(page,perPage,tokenKey)
+		var count = students.length;
+			res.status(200).send({
+				result: 0,
+				message: 'Get the list of successful students',
+				data: {
+				students: students,
+				current: page,
+				pages: Math.ceil(count / perPage),
+				ofset: count
+				}
+		})
+	}
+	catch(error)
+	{
+		res.status(400).send({
+			result: 0,
+			message: `Cant get list student ${error}`
+		})
+	}
+})
+router.get('/search',async (req,res)=>{
+	let tokenKey = req.headers['x-access-token'];
+	var page = parseInt(req.query.page) || 1; //n=1
+    var perPage = 5;
+	let {Sid,Sfname,Slname} = req.query;
+	try{
+		let students = await controller.searchList(page,perPage,Sid,Sfname,Slname,tokenKey)
+		var count = students.length;
+		res.status(200).send({
+			result: 1,
+			message: 'Query success list of student',
+			data: students,
+			current: page,
+			pages: Math.ceil(count / perPage),
+			ofset: count
+		})
+	}
+	catch(error)
+	{
+		res.status(400).send({
+			result: 0,
+			message: `Student not found: ${error}`
+		})
+	}
+})
 module.exports = router;
