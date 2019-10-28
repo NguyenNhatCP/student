@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const moment = require('moment');
+const controller = require('../controllers/student.controller');
 
-/*save loaction image*/ 
+/*save loaction image*/
 const path = './public/uploads/';
 
 const validate = require('../validate/user.validate');
@@ -37,127 +38,140 @@ const storage = multer.diskStorage({
 		}
 		id_photo = dd + '-' + mm + '-' + yyyy + '-' + h + ':' + i + ':' + s;
 		callback(null, id_photo + "*-" + file.originalname);
-		}
-  })
-  const fileFilter = (req,file,callback)=>{
-	  //reject a file
-	  if(!file.mimetype.match(/jpe|jpeg|png|gif$i/)){
+	}
+})
+const fileFilter = (req, file, callback) => {
+	//reject a file
+	if (!file.mimetype.match(/jpe|jpeg|png|gif$i/)) {
 		callback(new Error('File is not supported'), false)
 		return
 	}
-		callback(null, true)
-  }
+	callback(null, true)
+}
 
-   
-const upload = multer({ storage: storage, limits:{
-	fileSize: 1024 * 1024 * 5
+
+const upload = multer({
+	storage: storage, limits: {
+		fileSize: 1024 * 1024 * 5
 	},
 	fileFilter: fileFilter
 }).single('Savatar');
 
-const controller = require('../controllers/student.controller');
-
-//router.get('/',controller.index);
-router.get('/cookie',function(req,res,next)
-{
-	res.cookie('user-id',12345);
-	res.send('Hello');
+/************	Management Student(add,update,delete)	************/
+router.get('/student_index',controller.getAllStudent);
+router.get('/:id', async (req, res, next) => {
+	var pageData = {
+		title: 'View Information'
+	}
+	let _id = req.params.id;
+	let tokenKey = req.cookies.tokenKey;
+	try {
+		var infoStudent = await controller.view(_id, tokenKey);
+		res.render('admin/student/view', {
+			pageData: pageData,
+			student: infoStudent
+		});
+	}
+	catch (error) {
+		next(error)
+	}
 });
 //router.get('/search',controller.search);
-router.post('/register-student',upload,async(req,res)=>{
+router.post('/register-student', upload, async (req, res) => {
 	var day = req.body.Sbirthday;
-	var Sbirthday = moment(day,'dd/mm/yyyy','YYYY-MM-DDTHH:mm:ssZ');
+	var Sbirthday = moment(day, 'dd/mm/yyyy', 'YYYY-MM-DDTHH:mm:ssZ');
 	var Savatar = req.file.path.split('/').slice(1).join('/');
-	let {Sid,Slname,Sfname,Sgender,Sbirthplace,Strain,Fid,Password,Syear,Cid} = req.body;
+	let { Slname, Sfname, Sgender, Sbirthplace, Strain, Fid, Password, Syear, Cid, Fname } = req.body;
 	let tokenKey = req.headers['x-access-token'];
-	try{
-		let student = await controller.create({Sid,Slname,Sfname,Sgender,Sbirthday,
-			Sbirthplace,Strain,Fid,Syear,Cid,Password,Savatar},tokenKey);
-			res.status(200).send({
-				result: 1,
-				message: 'register user sucessfully',
-				data: student,
+	try {
+		let student = await controller.create({
+			Slname, Sfname, Sgender, Sbirthday,
+			Sbirthplace, Strain, Fid, Syear, Cid, Password, Savatar, Fname
+		}, tokenKey);
+		res.status(200).json({
+			result: 1,
+			message: 'register user sucessfully',
+			data: student,
 		})
 	}
-	catch(error)
-	{
-		res.status(400).send({
+	catch (error) {
+		res.status(400).json({
 			result: 0,
 			message: `register user failed.Error${error}`,
 		})
 	}
 })
-router.put('/update',upload,async (req,res)=>{
+router.put('/update', upload, async (req, res) => {
 	var day = req.body.Sbirthday;
-	var Sbirthday = moment(day,'dd/mm/yyyy','YYYY-MM-DDTHH:mm:ssZ');
+	var Sbirthday = moment(day, 'dd/mm/yyyy', 'YYYY-MM-DDTHH:mm:ssZ');
 	var Savatar = req.file.path.split('/').slice(1).join('/');
-	let {_id,Slname,Sfname,Sgender,Sbirthplace,Strain,Fid,Syear,Cid} = req.body;
+	let { _id, Slname, Sfname, Sgender, Sbirthplace, Strain, Fid, Syear, Cid } = req.body;
 	let tokenKey = req.headers['x-access-token']
-	try{
-		let student = await controller.update(_id,{Slname,Sfname,Sgender,Sbirthday,
-			Sbirthplace,Strain,Fid,Syear,Cid,Savatar},tokenKey);
+	try {
+		let student = await controller.update(_id, {
+			Slname, Sfname, Sgender, Sbirthday,
+			Sbirthplace, Strain, Fid, Syear, Cid, Savatar
+		}, tokenKey);
 		res.status(200).send({
 			result: 1,
 			message: 'update student sucessfully',
 			studentInf: student,
 		})
 	}
-	catch(error){
-		res.status(400).send({
+	catch (error) {
+		res.status(400).json({
 			result: 0,
 			message: `cannot update student ${error}`
 		})
 	};
 })
 router.post('/delete-by-id', async (req, res) => {
-    let tokenKey = req.headers['x-access-token']
-    let { studentId } = req.body
-    try {
-        await controller.deleteById(studentId, tokenKey)
-        res.status(200).send({
-            result: 1,
-            message: 'Delete student successfully!'
-        })
-    } catch (error) {
-        res.status(400).send({
-            message: `Error delete student: ${error}`
-        })
-    }
+	let tokenKey = req.headers['x-access-token']
+	let { studentId } = req.body
+	try {
+		await controller.deleteById(studentId, tokenKey)
+		res.status(200).send({
+			result: 1,
+			message: 'Delete student successfully!'
+		})
+	} catch (error) {
+		res.status(400).send({
+			message: `Error delete student: ${error}`
+		})
+	}
 })
-router.get('/all-student', async(req,res) =>{
+router.get('/all-student', async (req, res) => {
 	let tokenKey = req.headers['x-access-token'];
 	var page = parseInt(req.query.page) || 1; //n=1
-    var perPage = 5;
-	try
-	{
-		var students = await controller.getAllStudent(page,perPage,tokenKey)
+	var perPage = 5;
+	try {
+		var students = await controller.getAllStudent(page, perPage, tokenKey)
 		var count = students.length;
-			res.status(200).send({
-				result: 0,
-				message: 'Get the list of successful students',
-				data: {
+		res.status(200).send({
+			result: 0,
+			message: 'Get the list of successful students',
+			data: {
 				students: students,
 				current: page,
 				pages: Math.ceil(count / perPage),
 				ofset: count
-				}
+			}
 		})
 	}
-	catch(error)
-	{
+	catch (error) {
 		res.status(400).send({
 			result: 0,
 			message: `Cant get list student ${error}`
 		})
 	}
 })
-router.get('/search',async (req,res)=>{
+router.get('/search', async (req, res) => {
 	let tokenKey = req.headers['x-access-token'];
 	var page = parseInt(req.query.page) || 1; //n=1
-    var perPage = 5;
-	let {Sid,Sfname,Slname} = req.query;
-	try{
-		let students = await controller.searchList(page,perPage,Sid,Sfname,Slname,tokenKey)
+	var perPage = 5;
+	let { Sid, Sfname, Slname } = req.query;
+	try {
+		let students = await controller.searchList(page, perPage, Sid, Sfname, Slname, tokenKey)
 		var count = students.length;
 		res.status(200).send({
 			result: 1,
@@ -168,8 +182,7 @@ router.get('/search',async (req,res)=>{
 			ofset: count
 		})
 	}
-	catch(error)
-	{
+	catch (error) {
 		res.status(400).send({
 			result: 0,
 			message: `Student not found: ${error}`

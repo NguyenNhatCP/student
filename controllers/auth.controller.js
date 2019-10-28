@@ -19,7 +19,7 @@ const login = async (Sid,Password) => {
 		let foundUser = await User.findOne({Sid: Sid.trim()}).exec()
 		if(!foundUser)
 		{
-			throw "Sid does not exist"
+			console.log("Sid does not exist")
 		}
 		let encryptedPassword = foundUser.Password
 		let checkPassword = await bcrypt.compare(Password, encryptedPassword)
@@ -27,29 +27,30 @@ const login = async (Sid,Password) => {
 		{
 		let jsonObject = {id : foundUser._id}
 		let tokenKey = await jwt.sign(jsonObject,
-			secretString,{
-				expiresIn: 86400 //Expire in 24h
-			})
+			secretString)
+		//,{
+			//expiresIn: 86400 //Expire in 24h
+		//}
 		let userObject = foundUser.toObject()
 			userObject.tokenKey = tokenKey
 			return userObject
 		}
 		else
 		{
-			throw 'Mã sinh viên hoặc mật khẩu không đúng!!!' 
+			throw ('Username or password is invalid!!!' )
 		}
 	}
 	catch(error)
 	{
-		throw error	
+		throw ('Username or password is invalid!!!' )
 	}
 }
 const verifyJWT = async (tokenKey) => {
     try {
         let decodedJson = await jwt.verify(tokenKey, secretString)
-        if (Date.now() / 1000 > decodedJson.exp) {
-            throw "Token hết hạn, mời bạn login lại"
-        }
+        //if (Date.now() / 1000 > decodedJson.exp) {
+          //  throw "Token hết hạn, mời bạn login lại"
+        //}
         let foundUser = await User.findById(decodedJson.id)
         if (!foundUser) {
             throw "Ko tìm thấy user với token này"

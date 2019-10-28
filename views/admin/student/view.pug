@@ -1,0 +1,73 @@
+extends ../../layouts/commomAdmin
+
+block content
+	#page-wrapper(style='min-height: 409px;')
+		.main-page
+		each info in student
+			.bs-example5.widget-shadow
+				.media
+					.media-left
+						.media-object(style="text-align: center;")
+							img#imgProfile(src='http://localhost:3000/'+info.Savatar, style='width: 150px; height: 150px')
+							| MSSV: 
+							span= info.Sid 
+					.media-body
+						.userData.ml-3
+						| Họ và tên: 
+						span= info.Slname + " " + info.Sfname
+						h4.media-heading
+						| Trạng thái: 
+						if(info.Status == 1)
+							span(style='font-weight: bold;color: #D81B60') Đang học
+						else
+							span(style='font-weight: bold;color: #D81B60') Nghĩ học
+						h4.media-heading
+						| Khóa học: 
+						span= info.Syear
+						h4.media-heading
+						| Khoa: 
+						each F in info.Faculty
+							span= F.Fname
+						h4.media-heading
+						|  Lớp: 
+						h4.media-heading
+						|  Bậc đào tạo: 
+						span= info.Strain 
+					.row
+						.col-12
+							ul.nav.nav-second-level.collapse
+							li.nav(style="background:#1d85d2;")
+								a(style="color:#fff;font-weight: bold;") Thông tin cá nhân
+							#myTabContent.tab-content.ml-1
+								.row(style="font-size:0.95rem;")
+								.col-sm-3.col-md-2.col-5
+									label(style='font-weight:bold;') Ngày sinh: 
+								.col-md-8.col-6
+									span= info.Sbirthday
+								hr
+								.row
+								.col-sm-3.col-md-2.col-5
+									label(style='font-weight:bold;') Birth Date
+								.col-md-8.col-6
+									| March 22, 1994.
+								hr
+								.row
+								.col-sm-3.col-md-2.col-5
+									label(style='font-weight:bold;') Something
+								.col-md-8.col-6
+									| Something
+								hr
+								.row
+								.col-sm-3.col-md-2.col-5
+									label(style='font-weight:bold;') Something
+								.col-md-8.col-6
+									| Something
+								hr
+								.row
+								.col-sm-3.col-md-2.col-5
+									label(style='font-weight:bold;') Something
+								.col-md-8.col-6
+									| Something
+								hr
+							#connectedServices.tab-pane.fade(role='tabpanel', aria-labelledby='ConnectedServices-tab')
+								| Facebook, Google, Twitter Account that are connected to this account

@@ -3,14 +3,15 @@ html
 		title #{pageData.title}
 		meta(name='viewport', content='width=device-width, initial-scale=1')
 		meta(http-equiv='Content-Type', content='text/html; charset=utf-8')
-		meta(name='keywords', content='Car-shop Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, \ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design')
-		link(rel="stylesheet" ,href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css")
-		link(rel="stylesheet" , href="/styles/custom.css")
+		meta(name='keywords', content='')
+		link(rel='stylesheet', href='/styles/custom.css')
 		link(href='//fonts.googleapis.com/css?family=Playball', rel='stylesheet', type='text/css')
+		link(rel="stylesheet" ,href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css")
+		block styles
 		block head
 		// slider
-		script(src='js/jquery.min.js')
-		script(src='js/script.js', type='text/javascript')
+		script(src='/js/jquery.min.js')
+		script(src='/js/script.js', type='text/javascript')
 		script.
 			(function() {
 				console.log('This is coffee script');}).call(this);
@@ -82,57 +83,6 @@ html
 							.header-bottom
 								.header_bottom_right_images
 									block content
-								.header-para
-									.h3_browserbymake | BROWSE BY MAKE
-									.categories
-										.list-categories
-											.first-list
-												.div_2
-													a(href='#') Cars
-												.div_img
-													img(src='../../../images/car1.jpg', alt='Cars', title='Cars', width='60', height='39')
-												.clear
-											.first-list
-												.div_2
-													a(href='#') Rental
-												.div_img
-													img(src='../../../images/car2.jpg', alt='Cars', title='Cars', width='60', height='39')
-												.clear
-											.first-list
-												.div_2
-													a(href='#') Banking
-												.div_img
-													img(src='../../../images/car3.jpg', alt='Cars', title='Cars', width='60', height='39')
-												.clear
-											.first-list
-												.div_2
-													a(href='#') Trucks
-												.div_img
-													img(src='../../../images/car4.jpg', alt='Cars', title='Cars', width='60', height='39')
-												.clear
-										.box
-											.box-heading
-												h1
-													a(href='#') Cart:&nbsp;
-											.box-content
-												| Now in your cart&nbsp;
-												strong 0 items
-										.box-title
-											h1
-												span.title-icon
-												a(href='#') Specials
-										.section.group.example
-											.col_1_of_2.span_1_of_2
-												img(src='../../../images/pic21.jpg', alt='')
-												img(src='../../../images/pic24.jpg', alt='')
-												img(src='../../../images/pic25.jpg', alt='')
-												img(src='../../../images/pic27.jpg', alt='')
-											.col_1_of_2.span_1_of_2
-												img(src='../../../images/pic22.jpg', alt='')
-												img(src='../../../images/pic23.jpg', alt='')
-												img(src='../../../images/pic26.jpg', alt='')
-												img(src='../../../images/pic28.jpg', alt='')
-											.clear
 								.clear
 								.footer-bottom
 									.copy

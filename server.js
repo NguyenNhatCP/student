@@ -4,16 +4,28 @@ console.log(process.env.SESSION_SECRET);
 const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const path = require('path');
 //const fileUpload = require('express-fileupload');
 const csurf = require('csurf');
 const properties = require('./config/properties');
 
+//router api
+/*const api_studentRoutes = require('./api/routes/student.route');
+const api_authRoute = require('./api/routes/auth.route');
+const api_productRoute = require('./api/routes/product.route');
+const api_transcriptRoute = require('./api/routes/transcript.route');
+const api_subjectRoute = require('./api/routes/subject.route');
+const api_authMiddleware = require('./api/middlewares/auth.middleware');*/
+//router admin website
 const studentRoutes = require('./routes/student.route');
 const authRoute = require('./routes/auth.route');
 const productRoute = require('./routes/product.route');
 const cartRoute = require('./routes/cart.route');
 const tranferRoute = require('./routes/tranfer.route');
-const apiProductRoute = require('./api/routes/product.route');
+const transcriptRoute = require('./routes/transcript.route');
+const subjectRoute = require('./routes/subject.route');
+const facultyRoute = require('./routes/faculty.route');
+
 
 const authMiddleware = require('./middlewares/auth.middleware');
 const sessionMiddelWare = require('./middlewares/session.middleware');
@@ -23,7 +35,7 @@ const port = 3000;
 
 const app = express();
 app.use(express.static('public'));
-
+app.use(express.static(path.join(__dirname,'admin')));
 //Connect db
 var db = require('./config/database');
 // call the database connectivity function
@@ -44,14 +56,14 @@ app.use(function(req, res, next) {
     res.setHeader("Access-Control-Allow-Origin", "*");
      res.setHeader("Access-Control-Allow-Credentials", "true");
      res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-     res.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Origin,Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers,Authorization");
+     res.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Origin,Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers,Authorization,x-access-token");
    next();
  });
 
 app.get('/',function(req,res)
 {
 	const pageData = {
-		title: 'Home - Car Shopping',
+		title: 'Home - Student Management',
 		name: 'index'
 	};
 	res.render('index',{
@@ -59,13 +71,34 @@ app.get('/',function(req,res)
 	});
 });
 
-//Router 
-app.use('/api/products', apiProductRoute);
-app.use('/student',studentRoutes);
+//using Router website
+//app.use('/student',studentRoutes);
 app.use('/auth',authRoute);
-app.use('/products',sessionMiddelWare,productRoute);
-app.use('/cart', cartRoute);
+app.use('/products',authMiddleware.requireAuth,productRoute);
+app.use('/cart', cartRoute); 
 app.use('/tranfer',csurf({cookie: true}), tranferRoute);
+app.use('/transcript',transcriptRoute);
+app.use('/subject',subjectRoute);
+app.use('/faculty',facultyRoute);
+
+//ADMIN
+app.get('/admin',authMiddleware.requireAuthAdmin,function(req,res)
+{
+	const pageData = {
+		title: 'Home - Administrator Student Management',
+		name: 'index'
+	};
+	res.render('admin/index',{
+		pageData: pageData
+	});
+});
+app.use('/admin',authMiddleware.requireAuthAdmin,studentRoutes);
+//using Router api
+/*app.use('api/student',api_studentRoutes);
+app.use('api/auth',api_authRoute);
+app.use('api/products',api_sessionMiddelWare,api_productRoute);
+app.use('api/transcript',api_transcriptRoute);
+app.use('api/subject',api_subjectRoute);*/
 
 /*
 // catch 404 and forward to error handler

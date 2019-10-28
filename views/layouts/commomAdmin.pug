@@ -1,0 +1,339 @@
+html
+  body.cbp-spmenu-push
+    head
+      title #{pageData.title}
+      meta(name='viewport', content='width=device-width, initial-scale=1')
+      meta(http-equiv='Content-Type', content='text/html; charset=utf-8')
+      meta(name='keywords', content='')
+      script(type='application/x-javascript')
+      script.
+        addEventListener("load", function() {
+        setTimeout(hideURLbar, 0);
+        }, false);
+        function hideURLbar() {
+        window.scrollTo(0, 1);
+        }
+      // Bootstrap Core CSS
+      link(href='css/bootstrap.css', rel='stylesheet', type='text/css')
+      // Custom CSS
+      link(href='css/style.css', rel='stylesheet', type='text/css')
+      // font CSS
+      // font-awesome icons
+      link(href='css/font-awesome.css', rel='stylesheet')
+      // //font-awesome icons
+      // js
+      script(src='js/jquery-1.11.1.min.js')
+      script(src='js/modernizr.custom.js')
+      // webfonts
+      link(href='//fonts.googleapis.com/css?family=Roboto+Condensed:400,300,300italic,400italic,700,700italic', rel='stylesheet', type='text/css')
+      // //webfonts
+      // animate
+      link(href='css/animate.css', rel='stylesheet', type='text/css', media='all')
+      script(src='js/wow.min.js')
+      script.
+        new WOW().init();
+      // //end-animate
+      block head
+      // Metis Menu
+      script(src='js/metisMenu.min.js')
+      script(src='js/custom.js')
+      link(href='css/custom.css', rel='stylesheet')
+      // //Metis Menu
+    .main-content
+      // left-fixed -navigation
+      .sidebar(role='navigation')
+        .navbar-collapse
+          nav#cbp-spmenu-s1.cbp-spmenu.cbp-spmenu-vertical.cbp-spmenu-left
+            ul#side-menu.nav
+              li
+                a.active(href='/admin')
+                  i.fa.fa-home.nav_icon
+                  | Home Admin
+              li
+                a(href='#')
+                  i.fa.fa-cogs.nav_icon
+                  | Student Management
+                  span.nav-badge 12
+                  span.fa.arrow
+                ul.nav.nav-second-level.collapse
+                  li
+                    a(href='/admin/student_index') View student information
+                  li
+                    a(href='media.html') Add,Update,Delete
+                // /nav-second-level
+              li
+                a(href='#')
+                  i.fa.fa-book.nav_icon
+                  | Kết quả học tập
+                  span.fa.arrow
+                ul.nav.nav-second-level.collapse
+                  li
+                    a(href='general.html')
+                      | Xem kết quả
+                      span.nav-badge-btm 08
+                  li
+                    a(href='typography.html') Thêm,sửa,xóa
+                // /nav-second-level
+              li
+                a(href='widgets.html')
+                  i.fa.fa-th-large.nav_icon
+                  | Widgets
+                  span.nav-badge-btm 08
+              li
+                a(href='#')
+                  i.fa.fa-envelope.nav_icon
+                  | Mailbox
+                  span.fa.arrow
+                ul.nav.nav-second-level.collapse
+                  li
+                    a(href='inbox.html')
+                      | Inbox
+                      span.nav-badge-btm 05
+                  li
+                    a(href='compose.html') Compose email
+                // //nav-second-level
+              li
+                a(href='tables.html')
+                  i.fa.fa-table.nav_icon
+                  | Tables
+                  span.nav-badge 05
+              li
+                a(href='#')
+                  i.fa.fa-check-square-o.nav_icon
+                  | Forms
+                  span.fa.arrow
+                ul.nav.nav-second-level.collapse
+                  li
+                    a(href='forms.html')
+                      | Basic Forms
+                      span.nav-badge-btm 07
+                  li
+                    a(href='validation.html') Validation
+                // //nav-second-level
+              li
+                a(href='#')
+                  i.fa.fa-file-text-o.nav_icon
+                  | Pages
+                  span.nav-badge-btm 02
+                  span.fa.arrow
+                ul.nav.nav-second-level.collapse
+                  li
+                    a(href='login.html') Login
+                  li
+                    a(href='signup.html') SignUp
+                  li
+                    a(href='blank-page.html') Blank Page
+                // //nav-second-level
+              li
+                a.chart-nav(href='charts.html')
+                  i.fa.fa-bar-chart.nav_icon
+                  | Charts
+                  span.nav-badge-btm.pull-right new
+            // //sidebar-collapse
+      // left-fixed -navigation
+      // header-starts
+      .sticky-header.header-section
+        .header-left
+          // toggle button start
+          button#showLeftPush
+            i.fa.fa-bars
+          // toggle button end
+          // logo
+          .logo
+            a(href='index.html')
+              h1 NOVUS
+              span AdminPanel
+          // //logo
+          // search-box
+          .search-box
+            form.input
+              input#input-31.sb-search-input.input__field--madoka(placeholder='Search...', type='search')
+              label.input__label(for='input-31')
+                svg.graphic(width='100%', height='100%', viewbox='0 0 404 77', preserveaspectratio='none')
+                  path(d='m0,0l404,0l0,77l-404,0l0,-77z')
+          // //end-search-box
+          .clearfix
+        .header-right
+          .profile_details_left
+            // notifications of menu start
+            ul.nofitications-dropdown
+              li.dropdown.head-dpdn
+                a.dropdown-toggle(href='#', data-toggle='dropdown', aria-expanded='false')
+                  i.fa.fa-envelope
+                  span.badge 3
+                ul.dropdown-menu
+                  li
+                    .notification_header
+                      h3 You have 3 new messages
+                  li
+                    a(href='#')
+                      .user_img
+                        img(src='images/1.png', alt='')
+                      .notification_desc
+                        p Lorem ipsum dolor amet
+                        p
+                          span 1 hour ago
+                      .clearfix
+                  li.odd
+                    a(href='#')
+                      .user_img
+                        img(src='images/2.png', alt='')
+                      .notification_desc
+                        p Lorem ipsum dolor amet
+                        p
+                          span 1 hour ago
+                      .clearfix
+                  li
+                    a(href='#')
+                      .user_img
+                        img(src='images/3.png', alt='')
+                      .notification_desc
+                        p Lorem ipsum dolor amet
+                        p
+                          span 1 hour ago
+                      .clearfix
+                  li
+                    .notification_bottom
+                      a(href='#') See all messages
+              li.dropdown.head-dpdn
+                a.dropdown-toggle(href='#', data-toggle='dropdown', aria-expanded='false')
+                  i.fa.fa-bell
+                  span.badge.blue 3
+                ul.dropdown-menu
+                  li
+                    .notification_header
+                      h3 You have 3 new notification
+                  li
+                    a(href='#')
+                      .user_img
+                        img(src='images/2.png', alt='')
+                      .notification_desc
+                        p Lorem ipsum dolor amet
+                        p
+                          span 1 hour ago
+                      .clearfix
+                  li.odd
+                    a(href='#')
+                      .user_img
+                        img(src='images/1.png', alt='')
+                      .notification_desc
+                        p Lorem ipsum dolor amet
+                        p
+                          span 1 hour ago
+                      .clearfix
+                  li
+                    a(href='#')
+                      .user_img
+                        img(src='images/3.png', alt='')
+                      .notification_desc
+                        p Lorem ipsum dolor amet
+                        p
+                          span 1 hour ago
+                      .clearfix
+                  li
+                    .notification_bottom
+                      a(href='#') See all notifications
+              li.dropdown.head-dpdn
+                a.dropdown-toggle(href='#', data-toggle='dropdown', aria-expanded='false')
+                  i.fa.fa-tasks
+                  span.badge.blue1 15
+                ul.dropdown-menu
+                  li
+                    .notification_header
+                      h3 You have 8 pending task
+                  li
+                    a(href='#')
+                      .task-info
+                        span.task-desc Database update
+                        span.percentage 40%
+                        .clearfix
+                      .progress.progress-striped.active
+                        .bar.yellow(style='width:40%;')
+                  li
+                    a(href='#')
+                      .task-info
+                        span.task-desc Dashboard done
+                        span.percentage 90%
+                        .clearfix
+                      .progress.progress-striped.active
+                        .bar.green(style='width:90%;')
+                  li
+                    a(href='#')
+                      .task-info
+                        span.task-desc Mobile App
+                        span.percentage 33%
+                        .clearfix
+                      .progress.progress-striped.active
+                        .bar.red(style='width: 33%;')
+                  li
+                    a(href='#')
+                      .task-info
+                        span.task-desc Issues fixed
+                        span.percentage 80%
+                        .clearfix
+                      .progress.progress-striped.active
+                        .bar.blue(style='width: 80%;')
+                  li
+                    .notification_bottom
+                      a(href='#') See all pending tasks
+            .clearfix
+          // notification menu end
+          .profile_details
+            ul
+              li.dropdown.profile_details_drop
+                a.dropdown-toggle(href='#', data-toggle='dropdown', aria-expanded='false')
+                  .profile_img
+                    span.prfil-img
+                      img(src='images/a.png', alt='')
+                    .user-name
+                      p Wikolia
+                      span Administrator
+                    i.fa.fa-angle-down.lnr
+                    i.fa.fa-angle-up.lnr
+                    .clearfix
+                ul.dropdown-menu.drp-mnu
+                  li
+                    a(href='#')
+                      i.fa.fa-cog
+                      |  Settings
+                  li
+                    a(href='#')
+                      i.fa.fa-user
+                      |  Profile
+                  li
+                    a(href='#')
+                      i.fa.fa-sign-out
+                      |  Logout
+          .clearfix
+        .clearfix
+      // //header-ends
+      block content
+      // footer
+      .footer
+        p
+          | &copy; 2016 Novus Admin Panel. All Rights Reserved | Design by
+          a(href='https://w3layouts.com/', target='_blank') w3layouts
+      // //footer
+    // Classie
+    script(src='js/classie.js')
+    script.
+        var menuLeft = document.getElementById('cbp-spmenu-s1'),
+        showLeftPush = document.getElementById('showLeftPush'),
+        body = document.body;
+        showLeftPush.onclick = function() {
+        classie.toggle(this, 'active');
+        classie.toggle(body, 'cbp-spmenu-push-toright');
+        classie.toggle(menuLeft, 'cbp-spmenu-open');
+        disableOther('showLeftPush');
+        };
+        function disableOther(button) {
+        if (button !== 'showLeftPush') {
+        classie.toggle(showLeftPush, 'disabled');
+        }
+        }  
+        // scrolling js
+        script(src='js/jquery.nicescroll.js')
+        script(src='js/scripts.js')
+    // //scrolling js
+    // Bootstrap Core JavaScript
+    script(src='js/bootstrap.js')

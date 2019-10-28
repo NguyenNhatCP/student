@@ -2,21 +2,37 @@ var express = require('express');
 var authController = require('../controllers/auth.controller');
 var router = express.Router();
 
-router.get('/login',authController.indexLogin);
+router.get('/login', authController.indexLogin);
+
 router.post('/login', async (req, res) => {
-	let { Sid, Password } = req.body
+	var pageData = {
+		title: 'Login'
+	};
+	var errors = [];
+	let { Sid, Password } = req.body;
 	try {
 		let foundUser = await authController.login(Sid, Password)
-		res.status(200).send({
-			code: 1,
-			message: 'Login user successfully!',
-			result: [foundUser]
-		})
+		res.cookie('userId', foundUser._id, {
+			signed: true
+		});
+		res.cookie('tokenKey',foundUser.tokenKey)
+		if (foundUser.Permission == 'admin') {
+			res.redirect('/admin');
+		}
+		else {
+			res.redirect('/');
+		}
+		res.end();
 	} catch (error) {
-		res.status(400).send({
-			code: 0,
-			message: `Login user error : ${error}`
-		})
+		errors.push(`${error}`);
+		if (errors.length) {
+			res.render('auth/login', {
+				pageData: pageData,
+				errors: errors,
+				values: req.body
+			});
+			return;
+		}
 	}
 })
 router.get('/jwtTest', async (req, res) => {

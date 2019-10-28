@@ -1,0 +1,68 @@
+extends ../../layouts/commomAdmin
+
+block content
+		#page-wrapper(style='min-height: 409px;')
+			.main-page
+				.tables
+					h3.title1 Student Management 
+					a.btn.btn-primary(href="/users/create") Create new
+					.table-responsive.bs-example.widget-shadow
+						h4 Student information:
+						table.table.table-bordered
+							thead
+								tr
+								th NumberID
+								th Image
+								th FullName
+								th StudentID
+								th BirthDay
+								th BirthPlace
+								th Class
+								th(style='text-align: center;') Operations
+							- var i= 1;
+							each student in students
+								tbody
+									tr
+									th(scope='row')= (i++)
+									td 
+										img(src='http://localhost:3000/'+student.Savatar,width='34')
+									td= student.Slname+' '+student.Sfname
+									td= student.Sid
+									td= student.birthdayFormat
+									td= student.Sbirthplace
+									td= student.Cid
+									td(style='text-align: center;')
+										a.btn.btn-light(href=student._id) View
+										a.btn.btn-light(href='#') Edit
+										a.btn.btn-light(href='#') Delete 
+									tr
+				.text-center
+					if(pages > 0 )
+						ul.pagination
+							if(current == 1)
+								li.disabled
+									a Previous
+							else
+								li
+									a(href=`${baseUrl ? baseUrl: '?'}page=${parseInt(page)-1}`) Previous
+							-var i = (Number(current) > 5 ? Number(current) - 4 : 1)
+							if(i !== 1)
+								li.disabled
+							- for (; i <= (Number(current) + 4) && i <= pages; i++) 
+								if(i == current) 
+									li(class= pages > 1 ? "active" : "disabled")
+										a(href=`${baseUrl ? baseUrl: '?'}page=${parseInt(i)}`)= parseInt(i)
+								else
+									li 
+										a(href=`${baseUrl ? baseUrl: '?'}page=${parseInt(i)}`)= parseInt(i)
+								if (i == Number(current) + 4 && i < pages)
+									li.disabled
+										a(href=`${baseUrl ? baseUrl: '?'}page=${parseInt(i)}`)= '...'
+							if(current == pages | pages < 1)
+								li.disabled
+									a Next
+							else
+								li
+									a(href=`${baseUrl ? baseUrl: '?'}page=${parseInt(page)+1}`) Next
+					else
+						p Found 0 studuent in 0 pages
